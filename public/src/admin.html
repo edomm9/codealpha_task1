@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Adimn | Kalon</title>
+    <style>
+      .page {
+        display: none;
+      }
+
+      .active {
+        display: block;
+      }
+      .container {
+        margin-top: 20px;
+        background-color: #ffffff70;
+        padding: 20px;
+        border-radius: 10px;
+      }
+
+      .input-group input {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        background: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(11px);
+        color: #5b4327;
+        margin: 0 auto;
+      }
+      .input-group input:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.3);
+      }
+      .sticky {
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0;
+        z-index: 1000;
+      }
+      .input-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #000000;
+        font-size: 18px;
+      }
+      .glass-login-form h2 {
+        text-align: center;
+        color: #000000;
+      }
+      .glass-login-form {
+        background: rgba(255, 255, 255, 0.45);
+        border-radius: 15px;
+        backdrop-filter: blur(5px);
+        padding: 20px;
+      }
+      .icon {
+        margin-right: 40px;
+      }
+      .settings {
+        display: block;
+        margin: 0 auto;
+        width: 50%;
+        padding: 10px;
+        border: solid 1px #5b4327;
+        border-radius: 100px;
+        background: white;
+        color: #5b4327;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      body {
+        background-color: #5b432720;
+      }
+      
+      .status{
+        text-align:center;
+        color: red !important;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="sticky">
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="../index.html">Kalon</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="src/AboutUs.html"
+                  >About Us</a>
+              </li>
+              
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="admin.html"
+                  >Admin</a>
+              </li>
+        </div>
+        </div>
+      </nav>
+    </header>
+    <div class="container Products page active" id="page1">
+<form class="glass-login-form">
+            <h2>Log In</h2>
+            <p class="status"></p>
+            <div class="input-group">
+                <label for="email">Username</label>
+                <input type="text" placeholder="Username" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="pass">Password</label>
+                <input type="password" placeholder="Password" id="pass" name="pass" required>
+            </div>
+            <button class="settings" type="submit">Enter</button>
+        </form>
+    </div>
+    <div class="container Products page" id="page2">
+     
+      
+    </div>
+    <div class="container page" id="page3">
+      <button class="btn" onClick="showPage('page2')">Back</button>
+      <br /><br />
+      <div class="row">
+        <div class="col-sm-12">
+          <form class="glass-login-form" id="addForm">
+            <h2>Add | Update</h2>
+            <div class="input-group">
+              <label for="name">Name</label><br />
+              <input type="text" placeholder="eg. Name of design | Brand" name="name" id="name" required />
+            </div>
+            <div class="input-group">
+              <label for="email">Quantity</label><br />
+              <input type="number" placeholder="Quantity of product" name="quantity" id="quantity" required />
+            </div>
+            <div class="input-group">
+              <label for="username">Price</label><br />
+              <input
+                type="number"
+                placeholder="Price of product"
+                name="price"
+                required
+                id="price"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="pic">Picture</label><br />
+              <input type="file" name="pic" id="image" required />
+            </div>
+            <br /><br />
+            <div class="col-sm-12">
+              <button class="settings" type="submit">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12"></div>
+      </div>
+    </div>
+    <div class="container page " id="page4">
+
+    </div>
+    <div class="container page " id="page5">
+      
+     
+          </div>
+    <script src="admin.js"></script>
+  </body>
+</html>

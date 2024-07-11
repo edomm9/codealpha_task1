@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer | Kalon</title>
+    
+    <style>
+        body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url("../media/pexels-giallo-859895.jpg") !important;
+background-size:cover !important;
+background-repeat: no-repeat !important;
+}
+
+.container {
+    width: 75%;
+    max-width: 400px;
+}
+
+.glass-login-form {
+    background: rgba(255, 255, 255, 0.65);
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    padding: 20px;
+}
+
+.glass-login-form h2 {
+    text-align: center;
+    color: #5B4327;
+}
+
+.input-group {
+    margin: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #5B4327;
+}
+
+::placeholder {
+    color: #5B432740;
+}
+
+.input-group input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(245, 240, 240);
+    backdrop-filter: blur(11px);
+    color: #5B4327;
+}
+
+.input-group input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+button {
+    margin: 10px;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(45deg, #5B432790, #000000);
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+p{
+    text-align:center;
+}
+
+button:hover {
+    background: linear-gradient(45deg, #5d5e5d, #a4a4a7);
+}
+.sticky {
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0;
+        z-index: 1000;
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form class="glass-login-form" id="orderForm">
+            <h2>Customer Information</h2>
+            <div class="input-group">
+                <label for="name">Name</label>
+                <input type="text" placeholder="John Doe" id="customer-name" name="name" required>
+            </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" placeholder="JohnDoe@gmail.com" name="email" id="customer-email" required>
+            </div>
+           
+            <div class="input-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" placeholder="*** *** ****" id="customer-number" name="phone" required>
+            </div>
+            <div class="input-group">
+                <label for="address">Address: </label>
+                <input type="text" placeholder="Delivery Address" name="address" id="customer-address" required>
+            </div>
+            
+            <button type="submit">Order</button>
+        </form>
+        
+    </div>
+   <script>
+    const BaseUrl = "http://localhost:8585/";
+
+    document.addEventListener('DOMContentLoaded', function() {
+  const orderForm = document.getElementById('orderForm');
+  const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+  // Display cart items
+ cartItems.forEach(item => {
+   console.log(item.name + "" + item.price);
+  });
+
+  // Form submission
+  orderForm.addEventListener('submit', async function(event) {
+    event.preventDefault();
+console.log('in order form function');
+    const formData = {
+      customerName: document.getElementById('customer-name').value,
+      customerEmail: document.getElementById('customer-email').value,
+      customerAddress: document.getElementById('customer-address').value,
+      customerNumber: document.getElementById('customer-number').value,
+      products: cartItems.map(item => item.name), 
+      };
+
+    try {
+      console.log('posting data function');
+      const response = await fetch(BaseUrl+'api/order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        localStorage.removeItem('cartItems');
+        window.location.href = 'landing.html';
+      } else {
+        alert('Failed to place order');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while placing the order');
+    }
+  });
+});
+
+   </script>
+</body>
+</html>
