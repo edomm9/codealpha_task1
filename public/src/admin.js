@@ -225,31 +225,30 @@ async function deleteProduct(event, data) {
       document.addEventListener('DOMContentLoaded', async function() {
         console.log('doc loaded');
         const addForm = document.getElementById('addForm');
-        if (addForm){
-          addForm.addEventListener('submit', async function(e){
-            e.preventDefault();
-    const imageInput = document.querySelector("#image");
-   // Access the first selected file
-
-    if (!imageInput) {
-      alert("Please select an image file to upload.");
-      return; // Prevent form submission if no file is selected
-    }
-console.log('image uploaded?');
-    const product = {
-      name: document.querySelector("#name").value,
-      quantity: document.querySelector("#quantity").value,
-      price: document.querySelector("#price").value,
-      image: imageInput // Capture only the filename
-    }
-          const req = await fetch(BaseUrl + "api/products", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(product)
-          });
-          const resData = await req.json();
-          alert(resData.message);
-         })
+        if (addForm) {
+            addForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+    
+                const imageInput = document.getElementById("image");
+    
+                if (!imageInput.files[0]) {
+                    alert("Please select an image file to upload.");
+                    return; // Prevent form submission if no file is selected
+                }
+    
+                const formData = new FormData();
+                formData.append('name', document.querySelector("#name").value);
+                formData.append('quantity', document.querySelector("#quantity").value);
+                formData.append('price', document.querySelector("#price").value);
+                formData.append('image', imageInput.files[0]);
+    
+                const req = await fetch(BaseUrl + "api/products", {
+                    method: "POST",
+                    body: formData
+                });
+    
+                const resData = await req.json();
+                alert(resData.message);
+            });
         }
-       
-      });
+    });

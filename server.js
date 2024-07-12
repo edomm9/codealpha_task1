@@ -90,7 +90,8 @@ try{
 app.post("/api/products", upload.single("image"), async (req, res) => {
   try {
     const { name, quantity, price } = req.body;
-    const imagePath = "uploads/" + req.file;
+    console.log(req.file)
+    const imagePath = "uploads/" + req.file.originalname;
 
     const newProduct = new product({
       name,
@@ -107,17 +108,9 @@ app.post("/api/products", upload.single("image"), async (req, res) => {
         product: savedProduct,
         message: "Product with image uploaded successfully",
       });
-  } catch (error) {
+       } catch (error) {
     res.status(500).json({ message: error.message });
-  } finally {
-    if (req.file) {
-      try {
-        await unlinkFile(req.file.path);
-      } catch (error) {
-        console.error("Error deleting file:", error);
-      }
-    }
-  }
+  } 
 });
 //Update products
 app.patch("/api/products/:id", async (req, res) => {
