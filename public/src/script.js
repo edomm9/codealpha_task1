@@ -45,7 +45,7 @@ function displayCart() {
 initializeCart();
 
 
-async function getData(e, buttons) { // Assuming buttons is passed as an argument
+async function getData(e) { // Assuming buttons is passed as an argument
   e.preventDefault();
 
   const res = await fetch(BaseUrl + "api/products", {

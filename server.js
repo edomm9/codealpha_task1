@@ -60,8 +60,12 @@ app.get("/api/products/:id", async (req, res) => {
 //list order by id
 app.get("/api/order/:id", async (req, res) => {
   try {
+    console.log('order list by id triggered');
     const { id } = req.params;
     const Orders = await orders.findById(id);
+    if(!Orders){
+      alert('No orders yet');
+    }
     res.status(200).json(Orders);
   } catch (error) {
     res.status(500).json({ message: error.message });

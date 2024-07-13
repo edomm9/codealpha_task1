@@ -46,7 +46,8 @@ function showPage(pageId) {
     }
   });
 }
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", getData());
+async function getData () {
   const res = await fetch(BaseUrl + "api/products", {
     method: "GET",
   });
@@ -89,10 +90,10 @@ if (productsContainer) {
     deleteButtons.forEach(button => {
       button.addEventListener('click', event=> deleteProduct(event, data) );
     });
-  });
+  }
 
-
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", displayOrder());
+async function displayOrder() {
   console.log('doc loaded for order');
   const res = await fetch(BaseUrl + "api/order", {
     method: "GET",
@@ -129,14 +130,14 @@ console.log('order data from database');
     const completeButtons = document.querySelectorAll('.complete-btn');
     const viewButtons = document.querySelectorAll('.view-btn')
     completeButtons.forEach(button => {
-      button.addEventListener('click', async function (e, data) {
+      button.addEventListener('click', async function (e) {
         e.preventDefault();
         const productIndex = parseInt(e.currentTarget.dataset.productIndex);
-        if (isNaN(productIndex) || !data || productIndex >= data.length) {
+        if (isNaN(productIndex) || productIndex >= data.length) {
           console.error("Invalid product index in complete button");
           return;
         }
-
+    
         const product = {
           id: data[productIndex]._id
         };
@@ -144,60 +145,77 @@ console.log('order data from database');
           method: "DELETE",
         });
         
-if (res.ok) {
-    const responseData = await res.json();
-    alert(responseData.message);
-    
-} else {
-    alert('An error has occurred');
-}
+        if (res.ok) {
+          console.log('response received');
+          const responseData = await res.json();
+          console.log(responseData.message);
+          alert('Order removed');
+          displayOrder();
+        } else {
+          alert('An error has occurred');
+        }
       });
     });
+    
     viewButtons.forEach(button => {
-  button.addEventListener('click', async function (e, data) {
-    e.preventDefault();
-    const productIndex = parseInt(e.currentTarget.dataset.productIndex);
-    if (isNaN(productIndex) || !data || productIndex >= data.length) {
-      console.error("Invalid product index in view button");
-      return;
-    }
-
-    const order = {
-      id: data[productIndex]._id
-    };
-    const res = await fetch(BaseUrl + 'api/order/' + order.id, {
-      method: "GET",
-    });
-    if (res.ok) {
-  const responseData = await res.json();
-  const orders = responseData.products;
-
-  // Display the products in <li> tags
-  const productList = document.createElement('ul');
-  orders.forEach(product => {
-    const listItem = document.createElement('li');
-    listItem.textContent = product; // Accessing the product directly without using index 'i'
-    productList.appendChild(listItem);
-  });
-
-  // Append the list to a specific element on the page
-  const viewContainer = document.getElementById('page5'); // Assuming 'page5' is the id of the element where you want to display the products
-  viewContainer.innerHTML = '';
-  viewContainer.innerHTML=`
-   <div class="row">
-            <div class="col"><button class="btn" onClick="showPage('page2')">Back</button></div>
-            </div>
-            <h1>Orders: </h1>
-  `;
-  viewContainer.appendChild(productList);
-} else {
-      alert('An error has occurred');
-    }
-  });
-});  } else {
+      button.addEventListener('click', async function (e) {
+        e.preventDefault();
+        console.log('view button function triggered');
+        const productIndex = parseInt(e.currentTarget.dataset.productIndex);
+        if (isNaN(productIndex) || productIndex >= data.length) {
+          console.error("Invalid product index in view button");
+          return;
+        }
+    
+        const order = {
+          id: data[productIndex]._id
+        };
+        const res = await fetch(BaseUrl + 'api/order/' + order.id, {
+          method: "GET",
+        });
+        if (res.ok) {
+          console.log('response received');
+          const responseData = await res.json();
+          const orders = responseData.products;
+     
+          // Display the products in <li> tags
+          const orderList = document.createElement('ul');
+          orders.forEach(product => {
+            const listItem = document.createElement('li');
+            listItem.textContent = product;
+            orderList.appendChild(listItem);
+          });
+    
+          // Append the list to a specific element on the page
+          const viewContainer = document.getElementById('products');
+          viewContainer.innerHTML = ' ';
+          viewContainer.innerHTML=`
+           <div class="row">
+                    <div class="col"><button class="btn" onClick="showPage('page2')">Back</button></div>
+                    </div><br>
+                    <h3>Produc        
+                  `;
+          viewContainer.appendChild(orderList);
+          const info = document.getElementById('info');
+          info.innerHTML=' ';
+info.innerHTML=`<h3>Customer Info: </h3>
+<ul>
+          <li>Name: ${responseData.customerName} </li>
+          <li>Email: ${responseData.customerEmail}</li>
+          <li>Number: ${responseData.customerNumber}</li>
+          <li>Address: ${responseData.customerAddress}</li>
+          
+          </ul>`
+          console.log('viewContainer displayed');
+          showPage('page5');
+        } else {
+            alert('An error has occurred');
+        }
+      });
+    }); } else {
     console.error("view Container not found with id 'page3'");
   }
-});
+}
 
 async function deleteProduct(event, data) {
         event.preventDefault();
@@ -217,38 +235,45 @@ async function deleteProduct(event, data) {
         });
         if (res.ok) {
           const responseData = await res.json();
-          alert(responseData.message);
+          console.log(responseData.message);
+          alert('Product deleted please reload');
+          data.splice(productIndex, 1);
+
+         getData();
         } else {
           alert('An error has occurred');
         }
       }
       document.addEventListener('DOMContentLoaded', async function() {
-        console.log('doc loaded');
-        const addForm = document.getElementById('addForm');
-        if (addForm) {
-            addForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-    
-                const imageInput = document.getElementById("image");
-    
-                if (!imageInput.files[0]) {
-                    alert("Please select an image file to upload.");
-                    return; // Prevent form submission if no file is selected
-                }
-    
-                const formData = new FormData();
-                formData.append('name', document.querySelector("#name").value);
-                formData.append('quantity', document.querySelector("#quantity").value);
-                formData.append('price', document.querySelector("#price").value);
-                formData.append('image', imageInput.files[0]);
-    
-                const req = await fetch(BaseUrl + "api/products", {
-                    method: "POST",
-                    body: formData
-                });
-    
-                const resData = await req.json();
-                alert(resData.message);
+    console.log('doc loaded');
+    const addForm = document.getElementById('addForm');
+    if (addForm) {
+        addForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const imageInput = document.getElementById("image");
+
+            if (!imageInput.files[0]) {
+                alert("Please select an image file to upload.");
+                return; // Prevent form submission if no file is selected
+            }
+
+            const formData = new FormData();
+            formData.append('name', document.querySelector("#name").value);
+            formData.append('quantity', document.querySelector("#quantity").value);
+            formData.append('price', document.querySelector("#price").value);
+            formData.append('image', imageInput.files[0]);
+
+            const req = await fetch(BaseUrl + "api/products", {
+                method: "POST",
+                body: formData
             });
-        }
-    });
+
+            const resData = await req.json();
+            console.log(resData.message);
+            
+            alert('product added');
+            getData();
+        });
+    }
+});
